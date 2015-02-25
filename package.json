@@ -1,0 +1,25 @@
+{
+  "name": "thingpipe_phant",
+  "version": "0.0.0",
+  "description": "",
+  "main": "send",
+  "scripts": {
+    "test": "send"
+  },
+  "dependencies": {
+    "request": "2.53.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/open-eio/ThingPipe-Phant.git"
+  },
+  "keywords": [
+    "thingpipe"
+  ],
+  "author": "R.J. Steinert",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/open-eio/ThingPipe-Phant/issues"
+  },
+  "homepage": "https://github.com/open-eio/ThingPipe-Phant"
+}

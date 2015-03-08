@@ -1,25 +1,26 @@
 {
-  "name": "thingpipe_phant",
+  "name": "opk-phant-cli",
   "version": "0.0.0",
   "description": "",
   "main": "send",
   "scripts": {
-    "test": "send"
+    "test": "push"
   },
   "dependencies": {
-    "request": "2.53.0"
+    "request": "2.53.0",
+    "commander": "2.6.0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/open-eio/ThingPipe-Phant.git"
+    "url": "https://github.com/open-eio/opk-phant-cli.git"
   },
   "keywords": [
-    "thingpipe"
+    "opk"
   ],
   "author": "R.J. Steinert",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/open-eio/ThingPipe-Phant/issues"
+    "url": "https://github.com/open-eio/opk-phant-cli/issues"
   },
-  "homepage": "https://github.com/open-eio/ThingPipe-Phant"
+  "homepage": "https://github.com/open-eio/opk-phant-cli"
 }

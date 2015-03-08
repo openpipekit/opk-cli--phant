@@ -1,0 +1,29 @@
+#!/usr/bin/env node
+
+var fs = require('fs')
+var request = require('request')
+var command
+
+var program = require('commander');
+
+program
+  .version('0.0.0')
+  .option('-u, --url <url>', 'URL of the Phant server. Ex. http://data.sparkfun.com')
+  .option('-s, --public_key <public_key>', 'The public key Phant gave you for this stream')
+  .option('-p, --private_key <private_key>', 'The private key Phant gave you for this stream')
+  .option('-f, --field_name <field_name>', 'Field name you told Phant you would use for this stream')
+  .option('-d, --data <data>', 'Data! Yum yum.')
+  .parse(process.argv);
+
+var iri = program.url + '/input/' + program.public_key + 
+  '?private_key=' + program.private_key + 
+  '&' + program.field_name + '=' + program.data
+
+console.log('Sending GET: ' + iri)
+
+request
+  .get(iri)
+  .on('response', function(response) {
+    console.log(response.statusCode) // 200 
+  })
+

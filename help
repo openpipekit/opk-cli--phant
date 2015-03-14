@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 
-console.log('')
-console.log('Create a stream on a service like http://data.sparkfun.com and then configure a pipe as follows:')
-console.log('pipe config opk-phant-cli.url http://data.sparkfun.com')
-console.log('pipe config opk-phant-cli.public_key RM1nQNbVRGtaMMgvVz8Y')
-console.log('pipe config opk-phant-cli.private_key lz6d0j7KxPH1VVryqMw5')
-console.log('pipe config opk-phant-cli.field_name temp')
+console.log('./push')
+console.log('  --url http://data.sparkfun.com')
+console.log('  --public_key RM1nQNbVRGtaMMgvVz8Y')
+console.log('  --private_key lz6d0j7KxPH1VVryqMw5')
+console.log('  --field_name temp')
 console.log('')

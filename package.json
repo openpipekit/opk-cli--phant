@@ -1,13 +1,12 @@
 {
   "name": "opk-phant-cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "",
   "main": "send",
   "scripts": {
     "test": "push"
   },
   "dependencies": {
-    "request": "2.53.0",
     "commander": "2.6.0"
   },
   "repository": {

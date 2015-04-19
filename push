@@ -1,9 +1,6 @@
 #!/usr/bin/env node
 
-var fs = require('fs')
-var request = require('request')
-var command
-
+var http = require('http') 
 var program = require('commander');
 
 program
@@ -15,15 +12,32 @@ program
   .option('-d, --data <data>', 'Data! Yum yum.')
   .parse(process.argv);
 
-var iri = program.url + '/input/' + program.public_key + 
-  '?private_key=' + program.private_key + 
-  '&' + program.field_name + '=' + program.data
-
-console.log('Sending GET: ' + iri)
-
-request
-  .get(iri)
-  .on('response', function(response) {
-    console.log(response.statusCode) // 200 
+if (program.data) {
+  go()
+}
+else {
+  program.data = ''
+  process.stdin.on('data', function(chunk) {
+    if (chunk)
+      program.data += chunk
   })
+  process.stdin.on('end', function() {
+    go()
+  })
+}
 
+function go() {
+  var path = '/input/' + program.public_key + 
+    '?private_key=' + program.private_key + 
+    '&' + program.field_name + '=' + program.data;
+  http.get({ host: program.url, path: path}, function(response) {
+    response.on('error', function() {
+      console.log('error!')
+      process.exit(1)
+    })
+    response.on('data', function() {
+      console.log(response.statusCode) // 200 
+      process.exit(0)
+    })
+  })
+}

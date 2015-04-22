@@ -1,25 +1,21 @@
 #!/usr/bin/env node
 
 var http = require('http') 
-var program = require('commander');
+var options = parseArgv(process.argv)
 
-program
-  .version('0.0.0')
-  .option('-u, --url <url>', 'URL of the Phant server. Ex. http://data.sparkfun.com')
-  .option('-s, --public_key <public_key>', 'The public key Phant gave you for this stream')
-  .option('-p, --private_key <private_key>', 'The private key Phant gave you for this stream')
-  .option('-f, --field_name <field_name>', 'Field name you told Phant you would use for this stream')
-  .option('-d, --data <data>', 'Data! Yum yum.')
-  .parse(process.argv);
 
-if (program.data) {
+
+if (options.hasOwnProperty('help')) {
+  help()
+}
+else if (options.data) {
   go()
 }
 else {
-  program.data = ''
+  options.data = ''
   process.stdin.on('data', function(chunk) {
     if (chunk)
-      program.data += chunk
+      options.data += chunk
   })
   process.stdin.on('end', function() {
     go()
@@ -27,10 +23,11 @@ else {
 }
 
 function go() {
-  var path = '/input/' + program.public_key + 
-    '?private_key=' + program.private_key + 
-    '&' + program.field_name + '=' + program.data;
-  http.get({ host: program.url, path: path}, function(response) {
+  var path = '/input/' + options.public_key + 
+    '?private_key=' + options.private_key + 
+    '&' + options.field_name + '=' + options.data;
+  log(path)
+  http.get({ host: options.url, path: path}, function(response) {
     response.on('error', function() {
       console.log('error!')
       process.exit(1)
@@ -40,4 +37,41 @@ function go() {
       process.exit(0)
     })
   })
+}
+
+function help() {
+  console.log('./push')
+  console.log('  --url <url> Example: data.sparkfun.com')
+  console.log('  --public_key <public_key> Example: RM1nQNbVRGtaMMgvVz8Y')
+  console.log('  --private_key <private_key> Example: lz6d0j7KxPH1VVryqMw5')
+  console.log('  --field_name <field_name> Example: temp')
+  console.log('  --data [data] This is optional because you can also pipe data to this command.')
+  console.log('')
+}
+// This is the standard function for parsing process.argv. It will return
+// an object that where `--argumentName` is a property name and the
+// proceding argument is the value. If there is no proceeding value then
+// it will be interpreted as a boolean true.
+function parseArgv(argv) {
+  params = {}
+  argv.forEach(function(arg, i) {
+    if (arg.substr(0, 2) == '--') {
+      paramName = arg.substr(2, arg.length)
+      nextArg = argv[i+1]
+      if (typeof nextArg == 'string' && nextArg.substr(0, 2) == '--') {
+        params[paramName] = true
+      }
+      else {
+        params[paramName] = nextArg
+      }
+    }
+  })
+  return params
+}
+
+// A log function that will only log if the --verbose flag is set
+function log(msg) {
+  if (params.hasOwnProperty('verbose')) {
+    console.log(msg)
+  }
 }

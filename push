@@ -1,10 +1,13 @@
 #!/usr/bin/env node
 
 var http = require('http') 
-var split = require('split');
+var split = require('split')
 var options = parseArgv(process.argv)
 
 
+process.stdin.on('error', function(e) {
+  console.log("error: "+e)
+})
 
 if (options.hasOwnProperty('help')) {
   help()
@@ -12,9 +15,9 @@ if (options.hasOwnProperty('help')) {
 else if (options.hasOwnProperty('stream')) {
   process.stdin.pipe(split())
     .on('data', function (line) {
-      options.data = line;
+      options.data = line
       go()
-  });
+    })
 }
 else if (options.data) {
   go()
@@ -33,7 +36,7 @@ else {
 function go() {
   var path = '/input/' + options.public_key + 
     '?private_key=' + options.private_key + 
-    '&' + options.field_name + '=' + options.data;
+    '&' + options.field_name + '=' + options.data
   log(options.url+path)
   http.get({ host: options.url, path: path}, function(response) {
     response.on('error', function() {
@@ -43,7 +46,7 @@ function go() {
     response.on('data', function(chunk) {
       console.log(response.statusCode) // 200 
       console.log((chunk+"").replace(/<(?:.|\n)*?>/gm, ''))
-      process.exit(0)
+      if (!options.hasOwnProperty('stream')) process.exit(0)
     })
   })
 }
@@ -55,10 +58,12 @@ function help() {
   console.log('  --private_key <private_key> Example: lz6d0j7KxPH1VVryqMw5')
   console.log('  --field_name <field_name> Example: temp')
   console.log('  --data [data] This is optional because you can also pipe data to this command.')
+  console.log('  --stream Accepts streaming piped data, i.e. dosomething.sh | ./push --stream')
   console.log('')
   console.log('Example: push --verbose --url data.sparkfun.com --public_key lzELagraWDiMMRra0V6Q --private_key XXXXXXXXXX --field_name temp')
   console.log('')
 }
+
 // This is the standard function for parsing process.argv. It will return
 // an object that where `--argumentName` is a property name and the
 // proceding argument is the value. If there is no proceeding value then

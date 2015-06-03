@@ -35,8 +35,16 @@ else {
 
 function go() {
   var path = '/input/' + options.public_key + 
-    '?private_key=' + options.private_key + 
-    '&' + options.field_name + '=' + options.data
+    '?private_key=' + options.private_key
+  if (params.hasOwnProperty('json')) {
+    options.data = JSON.parse(options.data)
+    log(options.data)
+    for (var i = 0;i< Object.keys(options.data).length;i++) {
+      log(Object.keys(options.data)[i])
+      path = path + '&' + Object.keys(options.data)[i] 
+                  + '=' + options.data[Object.keys(options.data)[i]]
+    }
+  } else path += '&' + options.field_name + '=' + options.data
   log(options.url+path)
   http.get({ host: options.url, path: path}, function(response) {
     response.on('error', function() {
@@ -58,7 +66,8 @@ function help() {
   console.log('  --private_key <private_key> Example: lz6d0j7KxPH1VVryqMw5')
   console.log('  --field_name <field_name> Example: temp')
   console.log('  --data [data] This is optional because you can also pipe data to this command.')
-  console.log('  --stream Accepts streaming piped data, i.e. dosomething.sh | ./push --stream')
+  console.log('  --stream Accept streaming piped data, i.e. dosomething.sh | ./push --stream')
+  console.log('  --json Accept json data, i.e. {first:1,second:2}')
   console.log('')
   console.log('Example: push --verbose --url data.sparkfun.com --public_key lzELagraWDiMMRra0V6Q --private_key XXXXXXXXXX --field_name temp')
   console.log('')

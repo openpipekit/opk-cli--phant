@@ -34,8 +34,7 @@ else {
 }
 
 function go() {
-  var path = '/input/' + options.public_key + 
-    '?private_key=' + options.private_key
+  var path = '/input/' + options.public_key;
   if (params.hasOwnProperty('json')) {
     options.data = JSON.parse(options.data)
     log(options.data)
@@ -46,7 +45,16 @@ function go() {
     }
   } else path += '&' + options.field_name + '=' + options.data
   log(options.url+path)
-  http.get({ host: options.url, path: path}, function(response) {
+  var postOptions = {
+    'private_key':      options.private_key
+  }
+  postOptions[options.field_name] = options.data;
+  http.request({ 
+      host: options.url, 
+      path: path,
+      method: 'POST',
+      body: postOptions
+    }, function(response) {
     response.on('error', function() {
       console.log('error!')
       process.exit(1)
